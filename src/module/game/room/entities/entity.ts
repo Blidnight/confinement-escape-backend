@@ -62,7 +62,7 @@ export class Entity {
                     this.movement -= cost;
                     this.x = x;
                     this.y = y;
-                    state.coolDown = Date.now() + (path.length * 800) + 1000;
+                    state.coolDown = Date.now() + (path.length * 400) + 500;
                     state.machine.room.broadcast(JSON.stringify({
                         id : 'turn-update',
                         action : 'movement',
