@@ -191,7 +191,7 @@ export class RoomRunning extends RoomState {
             this.entityTurn = this.entities[currentTurnIndex + 1];
             this.entityTurn.reset();
             if (this.entityTurn.team === 'virus') {
-                this.timer = 10;
+                this.timer = 5;
             }
             this.machine.room.broadcast(
                 JSON.stringify({
@@ -221,7 +221,7 @@ export class RoomRunning extends RoomState {
             this.entityTurn = this.entities[0];
             this.entityTurn.reset();
             if (this.entityTurn.team === 'virus') {
-                this.timer = 10;
+                this.timer = 5;
             }
             this.machine.room.broadcast(
                 JSON.stringify({
@@ -289,15 +289,22 @@ export class RoomRunning extends RoomState {
                         console.log(schema);
                         if (schema) {
                             const attackCells = this.board.getSchemaCells(this.entityTurn.x, this.entityTurn.y, schema);
-                            console.log(attackCells);
+                         
                             attackCells.forEach(cell => {
                                 const [x, y] = cell.split('-').map(a => parseInt(a));
                                 if (!isNaN(x) && !isNaN(y)) {
                                     if (this.entityTurn.actions.has('attack-1')) this.entityTurn.action(this, 'attack-1', {x , y});
                                 }
                             });
+
+                            
+
                         }   
                         
+                    }
+                    if (this.timer <= 3) {
+                        this.filterDiedEntities();
+                        this.handleTurnChange();
                     }
                 }
                 this.timer -= 1;
@@ -313,7 +320,7 @@ export class RoomRunning extends RoomState {
         // -> initialize entities
         this.entities = this.createEntities();
         this.entityTurn = this.entities[0];
-        this.timer = this.entityTurn.team === 'virus' ? 10 : TURN_TIME;
+        this.timer = this.entityTurn.team === 'virus' ? 5 : TURN_TIME;
         // -> initialize the gameMap
 
         this.machine.room.broadcast(JSON.stringify(this.getState()));
